@@ -1,0 +1,8 @@
+[
+  { "id": 1, "code": "ICS4U", "name": "Computer Science", "teacherId": 1, "semester": "Full Year", "room": "305", "schedule": "Day 1 AM" },
+  { "id": 2, "code": "MCR3U", "name": "Advanced Functions", "teacherId": 2, "semester": "1", "room": "210", "schedule": "Day 2 PM" },
+  { "id": 3, "code": "ENG3U", "name": "English Literature", "teacherId": 3, "semester": "Full Year", "room": "118", "schedule": "Day 1 PM" },
+  { "id": 4, "code": "SPH4U", "name": "Physics", "teacherId": 4, "semester": "2", "room": "Lab 2", "schedule": "Day 3 AM" },
+  { "id": 5, "code": "CHV2O", "name": "Civics", "teacherId": 5, "semester": "1", "room": "102", "schedule": "Day 2 AM" },
+  { "id": 6, "code": "SBI3U", "name": "Biology", "teacherId": 6, "semester": "2", "room": "204", "schedule": "Day 3 PM" }
+]
