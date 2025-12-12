@@ -45,7 +45,7 @@ let nextTestId = tests.reduce((max, t) => Math.max(max, t.id), 0) + 1;
 
 
 
-app.get("/teachers", (req, res) => {res.status(200).json(teachers)})
+app.get("/teachers", (req, res) => { res.status(200).json(teachers) })
 
 
 app.get("/teachers/:id", (req, res) => {
@@ -76,7 +76,7 @@ app.post("/teachers", (req, res) => {
   }
 
   teachers.push(newTeacher)
-  saveJson(TEACHERS_FILE, teachers)
+  saveJson("teachers.json", teachers)
 
   res.status(201).json(newTeacher)
 })
@@ -97,7 +97,7 @@ app.put("/teachers/:id", (req, res) => {
   }
 
   Object.assign(teacher, updatedFields)
-  saveJson(TEACHERS_FILE, teachers)
+  saveJson("teachers.json", teachers)
 
   res.status(200).json(teacher)
 })
@@ -106,7 +106,7 @@ app.put("/teachers/:id", (req, res) => {
 app.delete("/teachers/:id", (req, res) => {
   const id = parseInt(req.params.id)
 
-  
+
   const isAssigned = courses.some(c => c.teacherId === id)
   if (isAssigned) {
     return res.status(400).json({ error: "Cannot delete teacher assigned to a course" })
@@ -119,7 +119,7 @@ app.delete("/teachers/:id", (req, res) => {
   }
 
   teachers.splice(index, 1)
-  saveJson(TEACHERS_FILE, teachers)
+  saveJson("teachers.json", teachers)
 
   res.status(200).json({ message: "Teacher deleted" })
 })
@@ -145,14 +145,14 @@ app.get("/courses/:id", (req, res) => {
 app.post("/courses", (req, res) => {
   const { code, name, teacherId, semester, room, schedule } = req.body
 
-  
+
   if (!code || !name || !teacherId || !semester || !room) {
-    return res.status(400).json({ 
-      error: "Missing required fields: code, name, teacherId, semester, room" 
+    return res.status(400).json({
+      error: "Missing required fields: code, name, teacherId, semester, room"
     })
   }
 
-  
+
   const teacherExists = teachers.some(t => t.id === teacherId)
   if (!teacherExists) {
     return res.status(400).json({ error: "Invalid teacherId: teacher not found" });
@@ -185,12 +185,12 @@ app.put("/courses/:id", (req, res) => {
 
   const { code, name, teacherId, semester, room, schedule } = req.body
 
-  
+
   if (teacherId && !teachers.some(t => t.id === teacherId)) {
     return res.status(400).json({ error: "Invalid teacherId: teacher not found" });
   }
 
- 
+
   if (code !== undefined) course.code = code
   if (name !== undefined) course.name = name
   if (teacherId !== undefined) course.teacherId = teacherId
@@ -258,7 +258,7 @@ app.post("/students", (req, res) => {
     lastName,
     grade,
     studentNumber,
-    homeroom: req.body.homeroom || null 
+    homeroom: req.body.homeroom || null
   }
 
   students.push(newStudent)
@@ -314,7 +314,7 @@ app.delete("/students/:id", (req, res) => {
 })
 
 
-app.get("/tests", (req, res) => {res.json(tests)})
+app.get("/tests", (req, res) => { res.json(tests) })
 
 
 app.get("/tests/:id", (req, res) => {
@@ -357,7 +357,7 @@ app.post("/tests", (req, res) => {
     date,
     mark,
     outOf,
-    weight: weight || null 
+    weight: weight || null
   }
 
   tests.push(newTest)
@@ -429,5 +429,31 @@ app.delete("/tests/:id", (req, res) => {
   res.json(deleted)
 })
 
+app.get('/teachers/:id/summary', (req, res) => {
+  const teacher = teachers.find(t => t.id === id)
+  if (!teacher) {
+    return res.status(404).json({ error: "Teacher not found" })
+  }
 
-app.listen(PORT, () => {console.log(`Server listening on http://localhost:${PORT}`)})
+  const teacherCourses = courses.filter(c => c.teacherId === id)
+
+  const resultCourses = teacherCourses.map(c => {
+    const testCount = tests.filter(t => t.courseId === c.id).length
+    return {
+      courseId: c.id,
+      courseName: c.name,
+      testCount: testCount
+    }
+  })
+
+  res.json({
+    teacherId: teacher.id,
+    teacherName: teacher.firstName + " " + teacher.lastName,
+    courses: resultCoutses
+
+  });
+})
+
+
+
+app.listen(PORT, () => { console.log(`Server listening on http://localhost:${PORT}`) })
