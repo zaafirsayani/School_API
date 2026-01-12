@@ -37,9 +37,10 @@ app.get('/', (req, res) => {
 app.get('/teachers', async (req, res) => {
   try {
     const db = getDb();
-    console.log(db);
-    console.log(db.collection('teachers'));
+    // console.log(db);
+    // console.log(db.collection('teachers'));
     const teachers = await db.collection('teachers').find({}).toArray();
+    console.log(teachers)
     res.json(teachers);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch teachers', details: error.message });
