@@ -39,6 +39,7 @@ app.get('/teachers', async (req, res) => {
     const db = getDb();
     // console.log(db);
     let teacherCollection = await db.collection('teachers');
+    console.log(teacherCollection)
     const teachers = await teacherCollection.find({});
     console.log(teachers)
     res.json(teachers);

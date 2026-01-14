@@ -24,8 +24,8 @@ export function getDb() {
     console.log("bad")
     throw new Error('Database not initialized. Call connectToDatabase first.');
   }
-  console.log("Good")
-  console.log(db)
+  //console.log("Good")
+  //console.log(db)
   return db;
 }
 
