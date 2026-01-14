@@ -41,7 +41,7 @@ app.get('/teachers', async (req, res) => {
     console.log(test.map(c=>c.name))
     // console.log(db);
     // console.log(db.collection('teachers'));
-    const teachers = await db.collection('steve').find({}).toArray();
+    const teachers = await db.collection('teachers').find({}).toArray();
     console.log(teachers)
     res.json(teachers);
   } catch (error) {
