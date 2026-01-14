@@ -11,7 +11,7 @@ export async function connectToDatabase() {
   try {
     await client.connect();
     console.log('✅ Connected to MongoDB Atlas');
-    db = client.db('School-API');
+    db = client.db('School-api');
     return db;
   } catch (error) {
     console.error('❌ Failed to connect to MongoDB:', error);
