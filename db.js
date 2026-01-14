@@ -21,8 +21,11 @@ export async function connectToDatabase() {
 
 export function getDb() {
   if (!db) {
+    console.log("bad")
     throw new Error('Database not initialized. Call connectToDatabase first.');
   }
+  console.log("Good")
+  console.log(db)
   return db;
 }
 
