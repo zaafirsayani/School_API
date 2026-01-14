@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 app.get('/teachers', async (req, res) => {
   try {
     const db = getDb();
-    const test = await db.getCollections({}, {nameOnly: true}).toArray();
+    const test = await db.listCollections({}, {nameOnly: true}).toArray();
     console.log(test.map(c=>c.name))
     // console.log(db);
     // console.log(db.collection('teachers'));
