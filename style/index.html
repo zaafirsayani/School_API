@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Records</title>
+  <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+  <header>
+    <h1>User Records</h1>
+    <p>
+      Add a user with the form on the left and display records in the table on the right.
+      <span class="hint">(Using localStorage to save records without JavaScript server-side functionality.)</span>
+    </p>
+  </header>
+  <main class="wrap">
+    <!-- FORM -->
+    <section class="card" aria-label="Add user form">
+      <div class="card-head">
+        <h2>Add a Record</h2>
+        <span class="hint">Fields marked * are required</span>
+      </div>
+      <form id="userForm" autocomplete="on">
+        <fieldset>
+          <legend>Identity</legend>
+          <div class="grid">
+            <label>
+              Full Name *
+              <input name="name" type="text" placeholder="e.g., Kevin DesLauriers" required />
+            </label>
+            <div class="grid two">
+              <label>
+                Age *
+                <input name="age" type="number" min="0" max="130" placeholder="e.g., 52" required />
+              </label>
+              <label>
+                Gender *
+                <select name="gender" required>
+                  <option value="" selected disabled>Choose…</option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Non-binary">Non-binary</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Contact</legend>
+          <div class="grid">
+            <label>
+              Phone Number *
+              <input name="phone" type="tel" placeholder="e.g., (416) 555-0123" required />
+            </label>
+            <label>
+              Address *
+              <textarea name="address" placeholder="Street, City, Province/State, Postal/ZIP" required></textarea>
+            </label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Account</legend>
+          <div class="grid two">
+            <label>
+              Username *
+              <input name="username" type="text" placeholder="e.g., kevin_d" required />
+            </label>
+            <label>
+              Password *
+              <input name="password" type="password" placeholder="Enter a password" required />
+            </label>
+          </div>
+          <div class="row">
+            <span class="req">Tip: Use HTTPS + server-side validation for passwords.</span>
+          </div>
+        </fieldset>
+        <div class="actions">
+          <button class="btn primary" type="submit">Add Record</button>
+          <button class="btn ghost" type="reset">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- TABLE -->
+    <section class="card table-wrap" aria-label="User records table">
+      <div class="card-head">
+        <h2>Current Records</h2>
+        <span class="hint">Example rows below</span>
+      </div>
+      <div class="table-scroller" role="region" aria-label="Scrollable user records table" tabindex="0">
+        <table id="user-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Gender</th>
+              <th>Age</th>
+              <th>Username</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body">
+            <!-- User records will be displayed here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    HTML + CSS only. This version uses localStorage to store user data on the client side.
+  </footer>
+
+  <script>
+    // Check if there are existing records in localStorage
+    if (localStorage.getItem("users")) {
+      // If so, load them into the table
+      loadUsers();
+    }
+
+    // Form submission handler
+    document.getElementById("userForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const formData = new FormData(event.target);
+      const newUser = {};
+      formData.forEach((value, key) => {
+        newUser[key] = value;
+      });
+
+      // Get existing users from localStorage or initialize an empty array
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Add new user to the array
+      users.push(newUser);
+
+      // Save the updated user list back to localStorage
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // Clear the form fields
+      event.target.reset();
+
+      // Reload the table with the new data
+      loadUsers();
+    });
+
+    // Function to load users from localStorage and display in the table
+    function loadUsers() {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const tableBody = document.getElementById("user-table-body");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      // Loop through each user and create a table row
+      users.forEach(user => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.phone}</td>
+          <td>${user.address}</td>
+          <td>${user.gender}</td>
+          <td>${user.age}</td>
+          <td>${user.username}</td>
+          <td>••••••••</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
